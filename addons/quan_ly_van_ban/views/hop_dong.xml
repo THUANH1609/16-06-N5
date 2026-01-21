@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hop_dong_tree" model="ir.ui.view">
+            <field name="name">hop_dong.tree</field>
+            <field name="model">hop_dong</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách Hợp đồng" decoration-info="trang_thai == 'moi'" decoration-success="trang_thai == 'hoan_thanh'">
+                    <field name="so_hop_dong"/>
+                    <field name="ten"/>
+                    <field name="khach_hang_id"/>
+                    <field name="gia_tri_hop_dong" sum="Tổng giá trị"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="trang_thai" widget="badge" decoration-info="trang_thai == 'dang_thuc_hien'" decoration-success="trang_thai == 'hoan_thanh'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hop_dong_form" model="ir.ui.view">
+            <field name="name">hop_dong.form</field>
+            <field name="model">hop_dong</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="trang_thai" widget="statusbar" clickable="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="so_hop_dong"/></h1>
+                            <h2><field name="ten" placeholder="Ví dụ: Hợp đồng cung cấp dịch vụ phần mềm..."/></h2>
+                        </div>
+                        <group>
+                            <group string="Thông tin đối tác">
+                                <field name="khach_hang_id" options="{'no_create': True}"/>
+                                <field name="nhan_vien_id" options="{'no_create': True}"/>
+                                <field name="gia_tri_hop_dong"/>
+                            </group>
+                            <group string="Thời hạn &amp; Hồ sơ">
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                                <field name="file_hop_dong" filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Ghi chú điều khoản">
+                                <field name="ghi_chu" placeholder="Nhập các điều khoản đặc biệt..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_hop_dong" model="ir.actions.act_window">
+            <field name="name">Hợp đồng</field>
+            <field name="res_model">hop_dong</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>
