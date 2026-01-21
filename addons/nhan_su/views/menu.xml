@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_root_nhan_su_v2" name="Quản lý Nhân sự" sequence="10"/>
+
+        <menuitem id="menu_nhan_vien_main" name="Nhân viên" parent="menu_root_nhan_su_v2" sequence="10"/>
+        <menuitem id="menu_nhan_vien_list" 
+                  name="Danh sách nhân viên" 
+                  parent="menu_nhan_vien_main" 
+                  action="nhan_su.action_nhan_vien" 
+                  sequence="10"/>
+
+        <menuitem id="menu_to_chuc_main" name="Tổ chức" parent="menu_root_nhan_su_v2" sequence="20"/>
+        <menuitem id="menu_phong_ban_list" 
+                  name="Phòng ban" 
+                  parent="menu_to_chuc_main" 
+                  action="nhan_su.action_phong_ban" 
+                  sequence="10"/>
+
+        <menuitem id="menu_danh_gia_main" name="Hiệu suất và Đánh giá" parent="menu_root_nhan_su_v2" sequence="30"/>
+        <menuitem id="menu_hieu_suat_nhan_vien" 
+                    name="Báo cáo hiệu suất" 
+                    parent="menu_danh_gia_main" 
+                    action="nhan_su.action_bao_cao_nhan_su" 
+                    sequence="10"/>
+    </data>
+</odoo>
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_root" name="QLNS" sequence="0"/>
+          
+        <menuitem name="Quản lý nhân viên" 
+                  id="menu_nhan_vien" 
+                  parent="menu_root" 
+                  sequence="1"
+                  action="action_nhan_vien"/>
+
+        <menuitem name="Phòng ban"
+                  id="menu_phong_ban"
+                  parent="menu_root"
+                  sequence="2"
+                  action="action_phong_ban"/>
+                  
+    </data>
+</odoo> -->
+
+

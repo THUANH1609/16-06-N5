@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_nhan_vien_form_inherit_button" model="ir.ui.view">
+            <field name="name">nhan.vien.form.inherit.button</field>
+            <field name="model">nhan_vien</field>
+            <field name="inherit_id" ref="nhan_su.view_nhan_vien_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_set_nghi_viec" 
+                            string="Cho nghỉ việc" 
+                            type="object" 
+                            class="btn-danger" 
+                            attrs="{'invisible': [('trang_thai', '!=', 'dang_lam')]}"/>
+                    <button name="action_set_dang_lam" 
+                            string="Quay lại làm việc" 
+                            type="object" 
+                            class="btn-success" 
+                            attrs="{'invisible': [('trang_thai', '!=', 'nghi_viec')]}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_nhan_vien_form_inherit_van_ban" model="ir.ui.view">
+        <field name="model">nhan_vien</field>
+        <field name="inherit_id" ref="nhan_su.view_nhan_vien_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook[@name='main_notebook']" position="inside">
+                <page string="📂 Hồ sơ &amp; Văn bản nhân sự">
+                    <field name="ho_so_ids" readonly="1">
+                        <tree>
+                            <field name="ten_ho_so"/>
+                            <field name="thoi_gian_bat_dau"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo> -->

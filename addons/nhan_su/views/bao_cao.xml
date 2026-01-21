@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Graph View - Biểu đồ cột -->
+        <record id="view_nhan_vien_graph" model="ir.ui.view">
+            <field name="name">nhan_vien.graph</field>
+            <field name="model">nhan_vien</field>
+            <field name="arch" type="xml">
+                <graph string="Thống kê nhân sự theo phòng ban" type="bar" stacked="False">
+                    <field name="phong_ban_id" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Graph View - Biểu đồ tròn -->
+        <record id="view_nhan_vien_graph_pie" model="ir.ui.view">
+            <field name="name">nhan_vien.graph.pie</field>
+            <field name="model">nhan_vien</field>
+            <field name="arch" type="xml">
+                <graph string="Phân bổ nhân sự theo phòng ban" type="pie">
+                    <field name="phong_ban_id" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Graph View - Biểu đồ đường -->
+        <record id="view_nhan_vien_graph_line" model="ir.ui.view">
+            <field name="name">nhan_vien.graph.line</field>
+            <field name="model">nhan_vien</field>
+            <field name="arch" type="xml">
+                <graph string="Xu hướng nhân sự" type="line">
+                    <field name="phong_ban_id" type="row"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Pivot View - Bảng tổng hợp -->
+        <record id="view_nhan_vien_pivot" model="ir.ui.view">
+            <field name="name">nhan_vien.pivot</field>
+            <field name="model">nhan_vien</field>
+            <field name="arch" type="xml">
+                <pivot string="Bảng tổng hợp nhân sự">
+                    <field name="phong_ban_id" type="row"/>
+                    <field name="trang_thai" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Action - Báo cáo tổng quan -->
+        <record id="action_bao_cao_nhan_su" model="ir.actions.act_window">
+            <field name="name">Báo cáo nhân sự</field>
+            <field name="res_model">nhan_vien</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="context">{
+                'search_default_active': 1,
+                'group_by': 'phong_ban_id'
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Chưa có dữ liệu để hiển thị báo cáo
+                </p>
+                <p>
+                    Hãy thêm nhân viên vào hệ thống để xem thống kê!
+                </p>
+            </field>
+        </record>
+
+        <!-- Action - Báo cáo theo phòng ban -->
+        <record id="action_bao_cao_theo_phong_ban" model="ir.actions.act_window">
+            <field name="name">Thống kê theo phòng ban</field>
+            <field name="res_model">nhan_vien</field>
+            <field name="view_mode">graph,pivot</field>
+            <field name="view_id" ref="view_nhan_vien_graph_pie"/>
+            <field name="context">{
+                'search_default_active': 1,
+                'group_by': 'phong_ban_id'
+            }</field>
+            <field name="domain">[('trang_thai', '=', 'dang_lam')]</field>
+        </record>
+
+        <!-- Action - Báo cáo theo trạng thái -->
+        <record id="action_bao_cao_theo_trang_thai" model="ir.actions.act_window">
+            <field name="name">Thống kê theo trạng thái</field>
+            <field name="res_model">nhan_vien</field>
+            <field name="view_mode">graph,pivot</field>
+            <field name="context">{'group_by': 'trang_thai'}</field>
+        </record>
+        <record id="action_hieu_suat_nhan_vien" model="ir.actions.act_window">
+            <field name="name">Báo cáo hiệu suất nhân viên</field>
+            <field name="res_model">nhan_vien</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Xem thống kê hiệu suất tại đây.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu Báo cáo -->
+        <menuitem id="menu_bao_cao_root" 
+          name="Bao cao" 
+          parent="menu_root_nhan_su_v2" 
+          sequence="50"/>
+
+        <menuitem id="menu_bao_cao_tong_quan"
+                  name="Tổng quan"
+                  parent="menu_bao_cao_root"
+                  action="action_bao_cao_nhan_su"
+                  sequence="10"/>
+
+        <menuitem id="menu_bao_cao_phong_ban"
+                  name="Theo phòng ban"
+                  parent="menu_bao_cao_root"
+                  action="action_bao_cao_theo_phong_ban"
+                  sequence="20"/>
+
+        <menuitem id="menu_bao_cao_trang_thai"
+                  name="Theo trạng thái"
+                  parent="menu_bao_cao_root"
+                  action="action_bao_cao_theo_trang_thai"
+                  sequence="30"/>
+
+    </data>
+</odoo>
