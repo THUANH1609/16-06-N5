@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_khach_hang_tree" model="ir.ui.view">
+            <field name="name">khach_hang.tree</field>
+            <field name="model">khach_hang</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách khách hàng">
+                    <field name="ma_khach_hang"/>
+                    <field name="name" string="Tên khách hàng" decoration-bf="1"/> 
+                    <field name="phone" widget="phone"/>
+                   <field name="nhan_vien_id"/>
+                    <field name="giai_doan" widget="badge" 
+                           decoration-info="giai_doan == 'ket_noi'"
+                           decoration-warning="giai_doan == 'dam_phan'"
+                           decoration-success="giai_doan in ['ky_hop_dong','thanh_cong']"
+                           decoration-danger="giai_doan == 'that_bai'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_khach_hang_form" model="ir.ui.view">
+            <field name="name">khach_hang.form</field>
+            <field name="model">khach_hang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_set_contract" string="Ký hợp đồng" type="object" class="oe_highlight" 
+                                attrs="{'invisible': [('giai_doan', 'in', ['ky_hop_dong','thanh_cong','that_bai'])]}"/>
+                        <button name="action_set_done" string="Thành công" type="object" class="oe_highlight" 
+                                attrs="{'invisible': [('giai_doan', '!=', 'ky_hop_dong')]}"/>
+                        
+                        <field name="giai_doan" widget="statusbar" clickable="1" 
+                               statusbar_visible="tiep_can,ket_noi,dam_phan,ky_hop_dong,thanh_cong"/>
+                    </header>
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar" options='{"preview_image": "image"}'/>
+                        
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Tên khách hàng"/>
+                            <h1><field name="name" placeholder="Ví dụ: Công ty ABC hoặc Nguyễn Văn A..."/></h1>
+                            <label for="ma_khach_hang" class="oe_edit_only"/>
+                            <h3><field name="ma_khach_hang" readonly="1" force_save="1"/></h3>
+                            <!-- <h3><field name="ma_khach_hang" readonly="1"/></h3> -->
+                        </div>
+
+                        <group>
+                            <group string="Tiến độ &amp; Kinh doanh">
+                                <field name="doanh_thu_tiem_nang" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="nhan_vien_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="ngay_nhan_lead" force_save="1"/>
+                                <!-- <field name="ngay_nhan_lead" readonly="1"/> -->
+                            </group>
+
+                            <group string="Thông tin liên hệ">
+                                <field name="phone" widget="phone"/>
+                                <field name="email" widget="email"/>
+                                <field name="gender" widget="radio" options="{'horizontal': true}"/>
+                                <field name="birthday"/>
+                                <field name="address" placeholder="Số nhà, phố, quận..."/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Lịch sử tương tác" name="interactions">
+                                <field name="lich_su_ids">
+                                    <tree editable="bottom">
+                                        <field name="ngay_tuong_tac"/>
+                                        <field name="loai_hinh"/>
+                                        <field name="nhan_vien_id" options="{'no_create': True}"/>
+                                        <field name="noi_dung"/>
+                                        <field name="ket_qua" widget="badge" decoration-success="ket_qua == 'Thành công'"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Báo giá &amp; Hợp đồng" name="quotes">
+                                <field name="bao_gia_ids">
+                                    <tree editable="bottom">
+                                        <field name="so_bao_gia"/>
+                                        <field name="ngay_lap"/>
+                                        <field name="nhan_vien_id"/>
+                                        <field name="tong_tien" sum="Tổng cộng"/>
+                                        <field name="trang_thai" widget="badge" 
+                                               decoration-info="trang_thai == 'da_gui'" 
+                                               decoration-success="trang_thai == 'chap_nhan'" 
+                                               decoration-danger="trang_thai == 'tu_choi'"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Hồ sơ pháp lý" attrs="{'invisible': [('giai_doan', 'in', ['tiep_can', 'ket_noi', 'dam_phan', 'that_bai'])]}">
+                                <field name="tai_lieu_ids">
+                                    <tree editable="bottom">
+                                        <field name="ten_tai_lieu"/>
+                                        <field name="loai_tai_lieu"/>
+                                        <field name="file_dinh_kem" filename="file_name"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="ngay_cap"/>
+                                        <field name="ngay_het_han" decoration-danger="ngay_het_han and ngay_het_han &lt; current_date"/>
+                                        <field name="ghi_chu"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Văn bản &amp; Quyết định" name="documents">
+                                <field name="van_ban_ids" readonly="1">
+                                    <tree string="Văn bản liên quan" create="false">
+                                        <field name="so_hieu"/>
+                                        <field name="ten_van_ban"/>
+                                        <field name="luong_van_ban" widget="badge" decoration-info="luong_van_ban == 'den'" decoration-warning="luong_van_ban == 'di'"/>
+                                        <field name="hinh_thuc_van_ban"/>
+                                        <field name="ngay_ban_hanh"/>
+                                        <field name="trang_thai" widget="badge" decoration-success="trang_thai == 'da_ky'"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Ghi chú nội bộ" name="internal_notes">
+                                <field name="description" placeholder="Nhập ghi chú chi tiết về khách hàng..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_khach_hang_chinh_thuc" model="ir.actions.act_window">
+            <field name="name">Khách hàng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', 'in', ['ky_hop_dong', 'thanh_cong'])]</field>
+        </record>
+
+        <record id="action_khach_hang_tiem_nang" model="ir.actions.act_window">
+            <field name="name">Khách hàng tiềm năng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', 'in', ['tiep_can', 'ket_noi', 'dam_phan', 'that_bai'])]</field>
+            <field name="context">{'default_giai_doan': 'tiep_can'}</field>
+        </record>
+
+        <record id="action_khach_hang_hop_dong" model="ir.actions.act_window">
+            <field name="name">Hợp đồng giao dịch</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', '=', 'ky_hop_dong')]</field>
+            <field name="context">{'default_giai_doan': 'ky_hop_dong'}</field>
+        </record>
+
+        <record id="action_khach_hang_ho_tro" model="ir.actions.act_window">
+            <field name="name">Hỗ trợ khách hàng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', '=', 'thanh_cong')]</field>
+            <field name="context">{'default_giai_doan': 'thanh_cong'}</field>
+        </record>
+
+
+
+
+        <record id="action_khach_hang_dashboard" model="ir.actions.act_window">
+        <field name="name">Phân tích &amp; KPI Khách hàng</field>
+        <field name="res_model">khach_hang</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Chưa có dữ liệu phân tích khách hàng. Hãy tạo thêm khách hàng để xem báo cáo!
+            </p>
+        </field>
+    </record>
+    </data>
+</odoo>
