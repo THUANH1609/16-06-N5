@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_khach_hang,khach_hang.khach_hang,model_khach_hang,base.group_user,1,1,1,1
+access_khach_hang_tiem_nang,khach_hang_tiem_nang,model_khach_hang_tiem_nang,base.group_user,1,1,1,1
+access_hop_dong_all,hop_dong_all,model_hop_dong,base.group_user,1,1,1,1
+access_ho_tro_khach_hang,ho_tro_khach_hang,model_ho_tro_khach_hang,base.group_user,1,1,1,1
+access_lich_su_tuong_tac,lich_su_tuong_tac_all,model_lich_su_tuong_tac,base.group_user,1,1,1,1
+access_bao_gia,bao_gia_all,model_bao_gia,base.group_user,1,1,1,1
+access_bao_gia_chi_tiet,access_bao_gia_chi_tiet,model_bao_gia_chi_tiet,base.group_user,1,1,1,1
+access_tai_lieu_phap_ly,tai_lieu_phap_ly_all,model_tai_lieu_phap_ly,base.group_user,1,1,1,1

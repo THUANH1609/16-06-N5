@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_khach_hang_tiem_nang_form" model="ir.ui.view">
+            <field name="name">khach_hang_tiem_nang.form</field>
+            <field name="model">khach_hang_tiem_nang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm_contract" 
+                                string="Xác nhận Ký hợp đồng" 
+                                type="object" 
+                                class="oe_highlight" 
+                                attrs="{'invisible': [('giai_doan', '=', '3')]}"/>
+                        
+                        <field name="giai_doan" widget="statusbar" statusbar_visible="1,1.5,2,3,4" options="{'clickable': '1'}"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Tên Lead"/>
+                            <h1><field name="name" placeholder="Ví dụ: Công ty TNHH ABC..."/></h1>
+                            <h3><field name="ma_lead"/></h3>
+                        </div>
+                        <notebook>
+                            <page string="Thông tin chính">
+                                <group>
+                                    <group string="Liên hệ">
+                                        <field name="dien_thoai" widget="phone"/>
+                                        <field name="email" widget="email"/>
+                                        <field name="nhan_vien_id" options="{'no_create': True, 'no_open': True}"/>
+                                    </group>
+                                    <group string="Cá nhân &amp; Thời gian">
+                                        <field name="ngay_nhan_lead" readonly="1"/>
+                                        <field name="gioi_tinh" widget="radio" options="{'horizontal': true}"/>
+                                        <field name="ngay_sinh"/>
+                                    </group>
+                                </group>
+                                
+                                <group string="Kế hoạch kinh doanh">
+                                    <field name="do_uu_tien" widget="priority"/>
+                                    <field name="doanh_thu_tiem_nang" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_khach_hang_tiem_nang_tree" model="ir.ui.view">
+            <field name="name">khach_hang_tiem_nang.tree</field>
+            <field name="model">khach_hang_tiem_nang</field>
+            <field name="arch" type="xml">
+                <tree string="Khách hàng tiềm năng" decoration-success="giai_doan == '3'" decoration-danger="giai_doan == '4'">
+                    <field name="ma_lead"/>
+                    <field name="name" string="Tên Lead" decoration-bf="1"/>
+                    <field name="dien_thoai"/>
+                    <field name="email"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="do_uu_tien" widget="priority" optional="show"/>
+                    
+                    <field name="giai_doan"
+                           widget="badge"
+                           decoration-info="giai_doan == '1'"
+                           decoration-muted="giai_doan == '1.5'"
+                           decoration-warning="giai_doan == '2'"
+                           decoration-success="giai_doan == '3'"
+                           decoration-danger="giai_doan == '4'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_khach_hang_tiem_nang" model="ir.actions.act_window">
+            <field name="name">Khách hàng tiềm năng</field>
+            <field name="res_model">khach_hang_tiem_nang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Bắt đầu tìm kiếm khách hàng mới ngay hôm nay!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_khach_hang_tiem_nang_form" model="ir.ui.view">
+            <field name="name">khach_hang_tiem_nang.form</field>
+            <field name="model">khach_hang_tiem_nang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm_contract" 
+                                string="Xác nhận Ký hợp đồng" 
+                                type="object" 
+                                class="oe_highlight" 
+                                attrs="{'invisible': [('giai_doan', '=', '3')]}"/>
+                        
+                        <field name="giai_doan" widget="statusbar" statusbar_visible="1,1.5,2,3,4"/>
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Tên Lead"/>
+                            <h1><field name="name" placeholder="Ví dụ: Công ty TNHH ABC..."/></h1>
+                            <h3><field name="ma_lead"/></h3>
+                        </div>
+                        <notebook>
+                            <page string="Thông tin chính">
+                                <group>
+                                    <group string="Liên hệ">
+                                        <field name="dien_thoai" widget="phone"/>
+                                        <field name="email" widget="email"/>
+                                        <field name="nhan_vien_id" options="{'no_create': True, 'no_open': True}"/>
+                                    </group>
+                                    <group string="Cá nhân &amp; Thời gian">
+                                        <field name="ngay_nhan_lead" readonly="1"/>
+                                        <field name="gioi_tinh" widget="radio" options="{'horizontal': true}"/>
+                                        <field name="ngay_sinh"/>
+                                    </group>
+                                </group>
+                                
+                                <group string="Kế hoạch kinh doanh">
+                                    <field name="doanh_thu_tiem_nang" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_khach_hang_tiem_nang_tree" model="ir.ui.view">
+            <field name="name">khach_hang_tiem_nang.tree</field>
+            <field name="model">khach_hang_tiem_nang</field>
+            <field name="arch" type="xml">
+                <tree string="Khách hàng tiềm năng" decoration-success="giai_doan == '3'" decoration-danger="giai_doan == '4'">
+                    <field name="ma_lead"/>
+                    <field name="name" string="Tên Lead" decoration-bf="1"/>
+                    <field name="dien_thoai"/>
+                    <field name="email"/>
+                    <field name="nhan_vien_id"/>
+                    
+                    <field name="giai_doan"
+                           widget="badge"
+                           decoration-info="giai_doan == '1'"
+                           decoration-warning="giai_doan == '2'"
+                           decoration-success="giai_doan == '3'"
+                           decoration-danger="giai_doan == '4'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_khach_hang_tiem_nang" model="ir.actions.act_window">
+            <field name="name">Khách hàng tiềm năng</field>
+            <field name="res_model">khach_hang_tiem_nang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Bắt đầu tìm kiếm khách hàng mới ngay hôm nay!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo> -->
