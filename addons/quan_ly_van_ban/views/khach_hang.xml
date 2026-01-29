@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_khach_hang_tree" model="ir.ui.view">
+            <field name="name">khach_hang.tree</field>
+            <field name="model">khach_hang</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách khách hàng">
+                    <field name="ma_khach_hang"/>
+                    <field name="name" decoration-bf="1"/> 
+                    <field name="phone" widget="phone"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="giai_doan" widget="badge" 
+                           decoration-info="giai_doan == '2'"
+                           decoration-warning="giai_doan == '3'"
+                           decoration-success="giai_doan in ['4','5']"
+                           decoration-danger="giai_doan == '6'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_khach_hang_form" model="ir.ui.view">
+            <field name="name">khach_hang.form</field>
+            <field name="model">khach_hang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="giai_doan" widget="statusbar" clickable="1" statusbar_visible="1,2,3,4,5"/>
+                    </header>
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar" options='{"preview_image": "image"}'/>
+                        
+                        <group>
+                            <group string="Tiến độ &amp; Kinh doanh">
+                                <field name="giai_doan" string="Giai đoạn"/> 
+                                <field name="doanh_thu_tiem_nang"/>
+                                <field name="nhan_vien_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="ngay_nhan_lead" readonly="1"/>
+                            </group>
+
+                            <group string="Thông tin liên hệ">
+                                <field name="name" string="Tên khách hàng" placeholder="Nhập tên..."/>
+                                <field name="ma_khach_hang" string="Mã định danh"/>
+                                <field name="phone" widget="phone"/>
+                                <field name="email" widget="email"/>
+                                <field name="gender" widget="radio" options="{'horizontal': true}"/>
+                                <field name="birthday"/>
+                                <field name="address" string="Địa chỉ"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Lịch sử tương tác">
+                                <field name="lich_su_ids">
+                                    <tree editable="bottom">
+                                        <field name="ngay_tuong_tac"/>
+                                        <field name="loai_hinh"/>
+                                        <field name="nhan_vien_id" options="{'no_create': True}"/>
+                                        <field name="noi_dung"/>
+                                        <field name="ket_qua"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Ghi chú khác">
+                                <group>
+                                    <field name="description" placeholder="Ghi chú nội dung đặc biệt về khách hàng này..."/>
+                                </group>
+                            </page>
+                            <page string="Báo giá">
+                            <field name="bao_gia_ids">
+                                <tree editable="bottom">
+                                    <field name="so_bao_gia"/>
+                                    <field name="ngay_lap"/>
+                                    <field name="nhan_vien_id"/>
+                                    <field name="tong_tien" sum="Tổng cộng"/>
+                                    <field name="trang_thai" widget="badge" 
+                                        decoration-info="trang_thai == 'da_gui'" 
+                                        decoration-success="trang_thai == 'chap_nhan'" 
+                                        decoration-danger="trang_thai == 'tu_choi'"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Hồ sơ pháp lý" attrs="{'invisible': [('giai_doan', 'in', ['1', '2', '3', '6'])]}">
+                                <field name="tai_lieu_ids">
+                                    <tree editable="bottom">
+                                        <field name="ten_tai_lieu"/>
+                                        <field name="loai_tai_lieu"/>
+                                        <field name="file_dinh_kem" filename="file_name"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="ngay_cap"/>
+                                        <field name="ngay_het_han" decoration-danger="ngay_het_han and ngay_het_han &lt; current_date"/>
+                                        <field name="ghi_chu"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_khach_hang_chinh_thuc" model="ir.actions.act_window">
+            <field name="name">Khách hàng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', 'in', ['4', '5'])]</field>
+        </record>
+
+        <record id="action_khach_hang_tiem_nang" model="ir.actions.act_window">
+            <field name="name">Khách hàng tiềm năng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', 'in', ['1', '2', '3', '6'])]</field>
+        </record>
+
+        <record id="action_khach_hang_hop_dong" model="ir.actions.act_window">
+            <field name="name">Hợp đồng giao dịch</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', '=', '4')]</field>
+            <field name="context">{'default_giai_doan': '4'}</field>
+        </record>
+
+        <record id="action_khach_hang_ho_tro" model="ir.actions.act_window">
+            <field name="name">Hỗ trợ khách hàng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', '=', '5')]</field>
+            <field name="context">{'default_giai_doan': '5'}</field>
+        </record>
+
+        <record id="action_hop_dong" model="ir.actions.act_window">
+            <field name="name">Hợp đồng</field>
+            <field name="res_model">hop_dong</field> 
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_khach_hang_tree" model="ir.ui.view">
+            <field name="name">khach_hang.tree</field>
+            <field name="model">khach_hang</field>
+            <field name="arch" type="xml">
+                <tree string="Danh sách khách hàng">
+                    <field name="ma_khach_hang"/>
+                    <field name="name" decoration-bf="1"/> 
+                    <field name="phone" widget="phone"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="giai_doan" widget="badge" 
+                           decoration-info="giai_doan == '2'"
+                           decoration-warning="giai_doan == '3'"
+                           decoration-success="giai_doan in ['4','5']"
+                           decoration-danger="giai_doan == '6'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_khach_hang_form" model="ir.ui.view">
+            <field name="name">khach_hang.form</field>
+            <field name="model">khach_hang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="giai_doan" widget="statusbar" clickable="1" statusbar_visible="1,2,3,4,5"/>
+                    </header>
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar" options='{"preview_image": "image"}'/>
+                        
+                        <group>
+                            <group string="Tiến độ &amp; Kinh doanh">
+                                <field name="giai_doan" string="Giai đoạn"/> 
+                                <field name="doanh_thu_tiem_nang"/>
+                                <field name="nhan_vien_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="ngay_nhan_lead" readonly="1"/>
+                            </group>
+
+                            <group string="Thông tin liên hệ">
+                                <field name="name" string="Tên khách hàng" placeholder="Nhập tên..."/>
+                                <field name="ma_khach_hang" string="Mã định danh"/>
+                                <field name="phone" widget="phone"/>
+                                <field name="email" widget="email"/>
+                                <field name="gender" widget="radio" options="{'horizontal': true}"/>
+                                <field name="birthday"/>
+                                <field name="address" string="Địa chỉ"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_khach_hang_chinh_thuc" model="ir.actions.act_window">
+            <field name="name">Khách hàng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', 'in', ['4', '5'])]</field>
+        </record>
+
+        <record id="action_khach_hang_tiem_nang" model="ir.actions.act_window">
+            <field name="name">Khách hàng tiềm năng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', 'in', ['1', '2', '3', '6'])]</field>
+        </record>
+
+        <record id="action_khach_hang_hop_dong" model="ir.actions.act_window">
+            <field name="name">Hợp đồng giao dịch</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', '=', '4')]</field>
+            <field name="context">{'default_giai_doan': '4'}</field>
+        </record>
+
+        <record id="action_khach_hang_ho_tro" model="ir.actions.act_window">
+            <field name="name">Hỗ trợ khách hàng</field>
+            <field name="res_model">khach_hang</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('giai_doan', '=', '5')]</field>
+            <field name="context">{'default_giai_doan': '5'}</field>
+        </record>
+        <record id="action_hop_dong" model="ir.actions.act_window">
+            <field name="name">Hợp đồng</field>
+            <field name="res_model">hop_dong</field> <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo> -->
