@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_quan_ly_van_ban,van_ban_all,model_quan_ly_van_ban,base.group_user,1,1,1,1
-access_tai_lieu_phap_ly,tai_lieu_phap_ly_all,model_tai_lieu_phap_ly,base.group_user,1,1,1,1
